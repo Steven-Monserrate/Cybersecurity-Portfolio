@@ -17,7 +17,7 @@
 #Reviewing the GET requests showed that the graphqinetwork.pro request was used to host the JSON file
 
 #I needed to find out where the stolen cookies were sent. Fetching a config is recon, but sending data out is the theft. A little after 14:00, the workstation switched from GET requests to POST requests aimed at an app. subdomain of the same attacker, uploading
-# a multiple-kilobyte payload. The proxy recorded the destination IP for each request.
+#a multiple-kilobyte payload. The proxy recorded the destination IP for each request.
 
 #Reviewing the logs showed that both POST requests came from the same destination IP - 149.248.2.160. This was our attacker
 
