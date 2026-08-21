@@ -21,4 +21,13 @@
 
 #Now that I found the first hop, I moved on to finding the next one. The 302 response from the redirect server sent sarah.jenkins to a credential harvesting page that closely mimicked the corporate Microsoft 365 login portal. The IDS and Azure AD sign-in logs captured what happened next.
 
-#The page redirect landed her on an adversary-in-the-middle proxy. It relayed sarah.jenkins's login 
+#The page redirect landed her on an adversary-in-the-middle proxy. It relayed sarah.jenkins's login to the real Microsoft endpoint in real time, so she saw a genuine sign-in flow. After she entered her password and approved the MFA prompt on the real Microsoft page, the proxy kept what Microsoft issued at the end of it. Whoever held that artifact would be able to return without her password and without a fresh MFA code.
+
+#Why this matters: An adversary-in-the-middle proxy defeats the control most organizations treat as final. The victim genuinely authenticates to Microsoft, the MFA prompt is genuinely approved, and the one-time code is spent the moment it is used, so it is not what the operator walks away with. Any sign-in that succeeds after this point deserves the question 'is this her, or is this the proxy's souvenir?'.
+
+#sarah.jenkin's browser submitted her login credentials to 185.234.72.19, the attacker's server
+
+#This is only part of the attacker's infrastructure. Once the proxy had what Microsoft issued at the end of her sign-in, the attacker switched to a different server to access Microsoft services with Sarah's stolen identity. This operational separation, one set of servers for phishing and another for post-compromise activity, is a hallmark of sophisticated campaigns.
+
+#Post compromise 
+
