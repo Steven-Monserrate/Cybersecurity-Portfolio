@@ -17,25 +17,25 @@
 
 #The attackers used the following filepath to get to the directory: /.git/config at 2:13 am
 
-![alt text](Photos/145.PNG)
+![alt text](Photos/145.png)
 
 #When this file was served, its body included the repository's remote origin URL. Git clone URLs can carry credentials inline in the form https://<user>:<token>@github.com./<org>/<repo>.git. The application log captured the served file's contents. Here, I reviewed it and identified the username whose personal access token was embedded in that clone URL.
 
 #In this attack, it was Marcus Feldman's account that was compromised
 
-![alt text](Photos/146.PNG)
+![alt text](Photos/146.png)
 
 #Roughly 20 minutes after the file was exposed, a second external address authenticated to the GitHub API using the stolen token, confirmed it was valid, and then cloned the private repository. Here, I searched the GitHub audit entries that our SIEM recorded and found the attacker's IP address.
 
 #The attacker's IP was 49.64.242.249.
 
-![alt text](Photos/147.PNG)
+![alt text](Photos/147.png)
 
 #Once the private repository was cloned, the attacker searched its source for A#WS access keys -- strings matching AKIA[A-Z0-9){16}. They found one hard-coded in the project's configuration and immediately tested it against the AWS API. The CloudTrail entries below show that key calling GetCallerIdentitiy and then enumerating IAM users. I reviewed them and identified the AWS access key ID that was used.
 
 #The key that was used was AKIA5RZ7QF2J6XW3LM8D
 
-![alt text](Photos/148.PNG)
+![alt text](Photos/148.png)
 
 #At this point, Priya from the DevOps team was racing to lock the account down. Around 03:21, the stolen key created a brand-new IAM user and attached the AdministratorAccess policy to it -- a foothold for sending spam and phishing through the company's cloud account. I reviewed the CloudTrail entries from our SIEM tool and found the creation and the policy attach. After reviewing them, I found the exact name and identity of the IAM user that was created.
 
