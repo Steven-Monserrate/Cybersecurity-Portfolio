@@ -29,5 +29,18 @@
 
 #This is only part of the attacker's infrastructure. Once the proxy had what Microsoft issued at the end of her sign-in, the attacker switched to a different server to access Microsoft services with Sarah's stolen identity. This operational separation, one set of servers for phishing and another for post-compromise activity, is a hallmark of sophisticated campaigns.
 
-#Post compromise 
+#Post compromise activity - Azure AD was now the only place that this attacker was visible. The phishing page did its job, and the session it produced was being used somewhere. I worked through the sign-in and audit entries for sarah.jenkins after the theft and decided, entry by entry, which ones were really her and which ones were the attacker.
 
+#After digging through the logs, I discovered the attacker logged into sarah.jenkins' account using 185.234.72.40 IP address.
+
+#At this point, I had mapped the hosts that the victim touched, the one that her scan resolved to, the one that took her credentials, and the one that the stolen session was used from. However, I still needed to get the domain that was used to build the lures on.
+
+#Reviewing the logs showed that the attacker's domain was m365-mfa-enroll.com. With this information, we were able to shut out the attacker entirely.
+
+#Campaign Scope: What I Confirmed -
+  #Delivery: Around 47 employees received a fake MFA-enrollment email carrying a QR code, sent from attacker-owned infrastructure that spoofed an internal IT sender. SPF, DKIM, and DMARC all failed, and a DMARC policy of none let it through anyway.
+  #Redirect: The decoded QR URL pointed at an intermediate hop, which immediately 302-redirected the victim to a lookalike Microsoft 365 sign-in page.
+  #Credential theft: The attacker's page was an adversary-in-the-middle (AiTM) proxy. It relayed sarah.jenkin's login to the real Microsoft endpoint and kept what Microsoft issued at the end of the exchange.
+  #Account takeover: The attacker replayed that access from a separate infrastructure, read 47 emails through the Graph API, downloaded SharePoint files, and left a persistence artifact behind in her mailbox.
+
+#To remove the attacker and contain the situation, I revoked sarah.jenkin's active sessions/tokens and removed the malicious inbox forwarding rule. This prevented the attacker from regaining access to sarah.jenkin's account, and from spreading the phishing campaign further.
