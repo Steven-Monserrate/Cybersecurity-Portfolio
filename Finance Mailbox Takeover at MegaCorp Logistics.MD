@@ -33,4 +33,6 @@
 
 (PHOTO)
 
-#https://www.socsimulator.com/training-operations/evilginx-aitm-session-cookie-hijack?track=soc-analyst-foundations
+#The attacker tried to utilize MITRE ATT&CK T1114.003, an email forwarding rule, so that they could gain persistent access to amanda.garcia's account. Once that trait was discovered, I removed the rule and ended the session token, thus removing access to the account from the attacker. I also made sure to do the same for all other affected accounts, guaranteeing that the attacker couldn't gain access through them.
+
+https://www.socsimulator.com/achievements/room/evilginx-aitm-session-cookie-hijack?ref=share&via=sheepdogcyber&utm_source=copy&utm_medium=social
